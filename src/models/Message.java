@@ -2,8 +2,10 @@
 
 
 Lesson 16Chapter 5.3
+
 モデル（DTO）の作成
 
+SELECT m は通常のSQLでいうところの SELECT * と同じ.
 
  */
 
@@ -16,9 +18,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "getAllMessages",
+        query = "SELECT m FROM Message AS m ORDER BY m.id DESC"
+// SELECT m は通常のSQLでいうところの SELECT * と同じ.
+            )
+})
 @Table(name = "messages")
 public class Message {
     @Id
