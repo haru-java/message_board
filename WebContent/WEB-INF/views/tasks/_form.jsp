@@ -1,8 +1,7 @@
 <%--
 Lesson 16Chapter 9.3
 newのビューを作成その２。
-フォームの共通レイアウトになる、これ。
-src/controllers/NewServlet.javaの変更からの、こちら。
+フォームの共通レイアウトになる。
 
 次にビューを作りましょう。ここで使うフォームは edit でも利用したいので、
 レイアウトファイルと同じように共通ファイル化しておきます。
@@ -31,13 +30,10 @@ JSTLタグを利用しているため
     </div>
 </c:if>
 
-<label for="title">タイトル</label><br />
-<input type="text" name="title" id="title" value="${message.title}" />
-<br /><br />
-
-<label for="content_msg">メッセージ</label><br />
-<input type="text" name="content" id="content_msg" value="${message.content}" />
+<label for="content_msg">タスク</label><br />
+<input type="text" name="content" id="content_msg" value="${task.content}" />
 <br /><br />
 
 <input type="hidden" name="_token" value="${_token}" />
 <button type="submit">投稿</button>
+

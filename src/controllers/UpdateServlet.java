@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Message;
-import models.validators.MessageValidator;
+import models.Task;
+import models.validators.TaskValidator;
 import utils.DBUtil;
 
 /**
@@ -60,29 +60,26 @@ public class UpdateServlet extends HttpServlet {
             // セッションスコープからメッセージのIDを取得して
             // 該当のIDのメッセージ1件のみをデータベースから取得
             // データは、汎用的な Object 型になっているため、(Integer) へキャスト
-            Message m = em.find(Message.class, (Integer)(request.getSession().getAttribute("message_id")));
+            Task t = em.find(Task.class, (Integer)(request.getSession().getAttribute("task_id")));
 
             // フォームの内容を各フィールドに上書き
-            String title = request.getParameter("title");
-            m.setTitle(title);
-
             String content = request.getParameter("content");
-            m.setContent(content);
+            t.setContent(content);
 
             Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-            m.setUpdated_at(currentTime);       // 更新日時のみ上書き
+            t.setUpdated_at(currentTime);       // 更新日時のみ上書き
 
          // バリデーションを実行してエラーがあったら編集画面のフォームに戻る
-            List<String> errors = MessageValidator.validate(m);
+            List<String> errors = TaskValidator.validate(t);
             if(errors.size() > 0) {
                 em.close();
 
                 // フォームに初期値を設定、さらにエラーメッセージを送る
                 request.setAttribute("_token", request.getSession().getId());
-                request.setAttribute("message", m);
+                request.setAttribute("task", t);
                 request.setAttribute("errors", errors);
 
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/messages/edit.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/edit.jsp");
                 rd.forward(request, response);
             } else {
                 // データベースを更新
@@ -92,7 +89,7 @@ public class UpdateServlet extends HttpServlet {
                 em.close();
 
                 // セッションスコープ上の不要になったデータを削除
-                request.getSession().removeAttribute("message_id");
+                request.getSession().removeAttribute("task_id");
 
                 // indexページへリダイレクト
                 response.sendRedirect(request.getContextPath() + "/index");
@@ -100,72 +97,3 @@ public class UpdateServlet extends HttpServlet {
         }
     }
 }
-
-
-
-/*
-Lesson 16Chapter 15.3までのもの
-
-package controllers;
-
-import java.io.IOException;
-import java.sql.Timestamp;
-
-import javax.persistence.EntityManager;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import models.Message;
-import utils.DBUtil;
-
-
-@WebServlet("/update")
-public class UpdateServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-
-    public UpdateServlet() {
-        super();
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String _token = request.getParameter("_token");
-        if(_token != null && _token.equals(request.getSession().getId())) {
-            EntityManager em = DBUtil.createEntityManager();
-
-            // セッションスコープからメッセージのIDを取得して
-            // 該当のIDのメッセージ1件のみをデータベースから取得
-            // データは、汎用的な Object 型になっているため、(Integer) へキャスト
-            Message m = em.find(Message.class, (Integer)(request.getSession().getAttribute("message_id")));
-
-            // フォームの内容を各フィールドに上書き
-            String title = request.getParameter("title");
-            m.setTitle(title);
-
-            String content = request.getParameter("content");
-            m.setContent(content);
-
-            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-            m.setUpdated_at(currentTime);       // 更新日時のみ上書き
-
-            // データベースを更新
-            em.getTransaction().begin();
-            em.getTransaction().commit();
-            request.getSession().setAttribute("flush", "更新が完了しました。");       // ここを追記
-            em.close();
-
-            // セッションスコープ上の不要になったデータを削除.
-            // 更新が完了した時点でセッションスコープ上のデータは要らなくなります。不要なデータをセッションスコープに残しておくのは、お行儀が悪い
-            request.getSession().removeAttribute("message_id");
-
-            // indexページへリダイレクト
-            response.sendRedirect(request.getContextPath() + "/index");
-        }
-    }
-}
-
-
-*/
