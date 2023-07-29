@@ -1,11 +1,14 @@
 /*
-
-
 Lesson 16Chapter 5.3
-
 モデル（DTO）の作成
-
 SELECT m は通常のSQLでいうところの SELECT * と同じ.
+
+Lesson 16Chapter 15.4
+indexの表示件数を減らす（ページネーション）その１
+1ページに15件のみ表示して、「次のページへ進む」「前のページへ戻る」リンクを追加しましょう。
+このような機能を ページネーション という。
+
+Message クラスの @NamedQuery アノテーション部分がもう一つ増えた。。
 
  */
 
@@ -28,6 +31,10 @@ import javax.persistence.Table;
         name = "getAllMessages",
         query = "SELECT m FROM Message AS m ORDER BY m.id DESC"
 // SELECT m は通常のSQLでいうところの SELECT * と同じ.
+            ),
+    @NamedQuery(
+            name = "getMessagesCount",
+            query = "SELECT COUNT(m) FROM Message AS m"
             )
 })
 @Table(name = "messages")

@@ -18,6 +18,10 @@ Lesson 16Chapter 15.3
 →そのあと/create、/update、/destroy の各サーブレットも修正しにいこう。
 src/controllers/CreateServlet.javaへ。
 
+Lesson 16Chapter 15.4
+indexの表示件数を減らす（ページネーション）その３
+「新規メッセージの投稿」の上に、以下の<div> タグを追記
+
  --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -45,6 +49,23 @@ src/controllers/CreateServlet.javaへ。
                 </li>
             </c:forEach>
         </ul>
+
+        <%--
+        ここから追加Lesson 16Chapter 15.4
+         --%>
+         <div id="pagination">
+            （全 ${messages_count} 件）<br />
+            <c:forEach var="i" begin="1" end="${((messages_count - 1) / 15) + 1}" step="1">
+                <c:choose>
+                    <c:when test="${i == page}">
+                        <c:out value="${i}" />&nbsp;
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/index?page=${i}"><c:out value="${i}" /></a>&nbsp;
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </div>
 
         <p><a href="${pageContext.request.contextPath}/new">新規メッセージの投稿</a></p>
 
