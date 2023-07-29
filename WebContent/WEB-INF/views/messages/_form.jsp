@@ -9,9 +9,28 @@ src/controllers/NewServlet.javaの変更からの、こちら。
 
 タイトルとメッセージのテキストボックスに value="${message.title}" のような記述を入れました。
 このあと作成する edit や、入力値エラーがあってフォームのページを再度表示する際に役立ちます。
+
+
+Lesson 16Chapter 15.5
+入力内容のチェック（バリデーション）その4
+フォーム画面が表示された際にエラー内容を表示するように変更を加えましょう。
+JSTLタグを利用しているため
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> の追加
+
  --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:if test="${errors != null}">
+    <div id="flush_error">
+        入力内容にエラーがあります。<br />
+        <c:forEach var="error" items="${errors}">
+            ・<c:out value="${error}" /><br />
+        </c:forEach>
+
+    </div>
+</c:if>
+
 <label for="title">タイトル</label><br />
 <input type="text" name="title" id="title" value="${message.title}" />
 <br /><br />

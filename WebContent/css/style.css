@@ -10,6 +10,10 @@ Lesson 16Chapter 15.3
 装飾した形でメッセージを表示したい。
 一番下に追記。
 
+Lesson 16Chapter 15.5
+入力内容のチェック（バリデーション）その５
+一番下に #flush_error の定義を加えてください。
+
 */
 
 @CHARSET "UTF-8";
@@ -95,6 +99,16 @@ button {
     margin-bottom: 15px;
     color: #155724;
     background-color: #d4edda;
+}
+
+#flush_error {
+    width: 100%;
+    padding-top: 28px;
+    padding-left: 2%;
+    padding-bottom: 28px;
+    margin-bottom: 15px;
+    color: #721c24;
+    background-color: #f8d7da;
 }
 
 
