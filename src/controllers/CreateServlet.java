@@ -6,6 +6,11 @@ create（挿入処理）の作成
 if(_token != null && _token.equals(request.getSession().getId())) { ... }
 でCSRF対策のチェックを行っています。_token に値がセットされていなかったり
 セッションIDと値が異なったりしたらデータの登録ができないようにしています。
+
+アクセス →「新規メッセージの投稿」→ タイトルとメッセージを入力して「投稿」、
+までの一連の流れを試しましょう。
+
+http://localhost:8080/message_board/index
  */
 
 
