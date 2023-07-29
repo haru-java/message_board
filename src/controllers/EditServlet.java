@@ -1,5 +1,4 @@
 /*
-
 Lesson 16Chapter 12
 edit（編集画面）の作成その２
 edit（編集画面）から。
@@ -10,6 +9,21 @@ edit（編集画面）から。
  しかし今回はセッションスコープへメッセージのIDの情報を保存して、
 /update へ渡すことにしました。
 
+
+Lesson 16Chapter 15.1
+データが無かった場合に表示内容を変えるその３
+
+request.getSession().setAttribute("message_id", m.getId());
+の1行で、該当するIDのメッセージデータがない場合に
+NullPointerExceptionが出るため、例外を回避するための修正。
+「        // メッセージIDをセッションスコープに登録
+        request.getSession().setAttribute("message_id", m.getId());」を変更
+行を if で囲う。
+
+→クエリ・パラメータとなる id=? の ? を「存在していないメッセージIDの数値」にしてアクセスします。
+その結果「お探しのデータは見つかりませんでした」と表示される。
+http://localhost:8080/message_board/show?id=999
+みたいな感じ。
  */
 
 package controllers;
@@ -56,8 +70,11 @@ public class EditServlet extends HttpServlet {
         request.setAttribute("message", m);
         request.setAttribute("_token", request.getSession().getId());
 
+        // メッセージデータが存在しているときのみ
         // メッセージIDをセッションスコープに登録
-        request.getSession().setAttribute("message_id", m.getId());
+        if(m != null) {
+            request.getSession().setAttribute("message_id", m.getId());
+        }
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/messages/edit.jsp");
         rd.forward(request, response);

@@ -13,6 +13,14 @@ http://localhost:8080/message_board/show?id=1
 Lesson 16Chapter 12
 edit（編集画面）の作成その２
 edit（編集画面）から。show.jsp に edit へのリンクを貼りましょう。「一覧へ戻る」リンクの行の下に1行追加
+
+Lesson 16Chapter 15.1
+データが無かった場合に表示内容を変えるその１
+
+該当するIDのメッセージデータが無かった場合に お探しのデータは見つかりませんでした。
+ と表示させるように変更します。条件分岐をしたいので
+<c:choose> および <c:when> 、 <c:otherwise> を使いましょう。
+
  --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -20,17 +28,23 @@ edit（編集画面）から。show.jsp に edit へのリンクを貼りまし�
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:import url="../layout/app.jsp">
     <c:param name="content">
+        <c:choose>
+            <c:when test="${message != null}">
+                <h2>id : ${message.id} のメッセージ詳細ページ</h2>
 
-        <h2>id : ${message.id} のメッセージ詳細ページ</h2>
+                <p>タイトル：<c:out value="${message.title}" /></p>
+                <p>メッセージ：<c:out value="${message.content}" /></p>
+                <p>作成日時：<fmt:formatDate value="${message.created_at}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                <p>更新日時：<fmt:formatDate value="${message.updated_at}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
 
-        <p>タイトル：<c:out value="${message.title}" /></p>
-        <p>メッセージ：<c:out value="${message.content}" /></p>
-        <p>作成日時：<fmt:formatDate value="${message.created_at}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
-        <p>更新日時：<fmt:formatDate value="${message.updated_at}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                <p><a href="${pageContext.request.contextPath}/index">一覧に戻る</a></p>
+                <p><a href="${pageContext.request.contextPath}/edit?id=${message.id}">このメッセージを編集する</a></p>
+            </c:when>
 
-        <p><a href="${pageContext.request.contextPath}/index">一覧に戻る</a></p>
-        <p><a href="${pageContext.request.contextPath}/edit?id=${message.id}">このメッセージを編集する</a></p>
-
+            <c:otherwise>
+                <h2>お探しのデータは見つかりませんでした。</h2>
+            </c:otherwise>
+        </c:choose>
 
     </c:param>
 </c:import>
