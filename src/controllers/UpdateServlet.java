@@ -1,11 +1,14 @@
 /*
 
 Lesson 16Chapter 13
-
 update（更新処理）の作成
 
+Lesson 16Chapter 15.3
+フラッシュメッセージを出すその３
 
-
+フラッシュメッセージをセッションスコープに保存し、
+index.jsp を呼び出したときにセッションスコープから取り出して表示するようにします
+em.getTransaction().commit(); のすぐ下に命令を追記
  */
 
 package controllers;
@@ -63,6 +66,7 @@ public class UpdateServlet extends HttpServlet {
             // データベースを更新
             em.getTransaction().begin();
             em.getTransaction().commit();
+            request.getSession().setAttribute("flush", "更新が完了しました。");       // ここを追記
             em.close();
 
             // セッションスコープ上の不要になったデータを削除.

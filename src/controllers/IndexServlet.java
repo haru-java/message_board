@@ -5,6 +5,15 @@ Lesson 16Chapter 9.2
 indexのビューを作成
 
 http://localhost:8080/message_board/index
+
+Lesson 16Chapter 15.3
+フラッシュメッセージを出すその５
+
+セッションスコープに入れっぱなしだと、index にアクセスするたび表示されます。
+一度限りの表示とするため、IndexServlet でセッションスコープからリクエストスコープに移し替え、
+そのあとセッションスコープから除去。
+問い合わせ結果をリクエストスコープにセットする行の下に、追記。
+
  */
 
 
@@ -49,6 +58,13 @@ public class IndexServlet extends HttpServlet {
         em.close();
 
         request.setAttribute("messages", messages);
+
+        // フラッシュメッセージがセッションスコープにセットされていたら
+        // リクエストスコープに保存する（セッションスコープからは削除）
+        if(request.getSession().getAttribute("flush") != null) {
+            request.setAttribute("flush", request.getSession().getAttribute("flush"));
+            request.getSession().removeAttribute("flush");
+        }
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/messages/index.jsp");
         rd.forward(request, response);

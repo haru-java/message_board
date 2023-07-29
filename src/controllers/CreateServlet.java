@@ -11,6 +11,15 @@ if(_token != null && _token.equals(request.getSession().getId())) { ... }
 までの一連の流れを試しましょう。
 
 http://localhost:8080/message_board/index
+
+
+
+Lesson 16Chapter 15.3
+フラッシュメッセージを出すその２
+
+フラッシュメッセージをセッションスコープに保存し、
+index.jsp を呼び出したときにセッションスコープから取り出して表示するようにします
+em.getTransaction().commit(); のすぐ下に命令を追記
  */
 
 
@@ -67,6 +76,7 @@ public class CreateServlet extends HttpServlet {
 
             em.persist(m);
             em.getTransaction().commit();
+            request.getSession().setAttribute("flush", "登録が完了しました。");       // ここを追記
             em.close();
 
             response.sendRedirect(request.getContextPath() + "/index");

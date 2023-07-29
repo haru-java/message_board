@@ -7,6 +7,13 @@ destroy（削除処理）の作成その２
 em.find で取得したオブジェクトを引数に入れて em.remove(); を実行し、
 さらに em.getTransaction().commit(); でコミットする必要があります。
 
+Lesson 16Chapter 15.3
+フラッシュメッセージを出すその４
+
+フラッシュメッセージをセッションスコープに保存し、
+index.jsp を呼び出したときにセッションスコープから取り出して表示するようにします
+em.getTransaction().commit(); のすぐ下に命令を追記
+
  */
 
 package controllers;
@@ -52,6 +59,7 @@ public class DestroyServlet extends HttpServlet {
             em.getTransaction().begin();
             em.remove(m);       // データ削除
             em.getTransaction().commit();
+            request.getSession().setAttribute("flush", "削除が完了しました。");       // ここを追記
             em.close();
 
             // セッションスコープ上の不要になったデータを削除

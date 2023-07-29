@@ -9,12 +9,31 @@ app.jsp の ${param.content} のところに当てはまります。
 このあたりを復習したい方は サーブレット/JSP2の
 「2.1 主なJSTLタグまとめ」にある「HTMLのテンプレート化」 を参照してください。
 
+
+Lesson 16Chapter 15.3
+フラッシュメッセージを出すその１
+「登録が完了しました」のような文言を表示したい。
+その文言を表示する場所を、リダイレクト先の index とし、index.jsp の「メッセージ一覧」と書かれた場所の上に、
+以下の <c:if> タグを追記。
+→そのあと/create、/update、/destroy の各サーブレットも修正しにいこう。
+src/controllers/CreateServlet.javaへ。
+
  --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:import url="../layout/app.jsp">
     <c:param name="content">
+
+    <c:if test="${flush != null}">
+        <div id="flush_success">
+             <c:out value="${flush}"></c:out>
+        </div>
+    </c:if>
+<%--
+文言を表示する場所
+ --%>
+
         <h2>メッセージ一覧</h2>
         <ul>
             <c:forEach var="message" items="${messages}">
